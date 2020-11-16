@@ -5,7 +5,9 @@ const logger = require("./utils/logger");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const middleware = require("./utils/middleware");
-const startScrap = require("./scraper");
+// const startScrap = require("./scraper");
+const notesRouter = require("./controllers/memes");
+require("dotenv").config();
 
 logger.info("connecting to database");
 
@@ -24,7 +26,12 @@ mongoose
   });
 
 app.use(cors());
-startScrap;
+app.use("", notesRouter);
+
+if (process.env.NODE_ENV === "scrap") {
+    const startScrap = require("./scraper");
+    startScrap;
+}
 
 app.use(middleware.unknownRequest);
 

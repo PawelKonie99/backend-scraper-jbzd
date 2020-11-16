@@ -1,26 +1,26 @@
-const axios = require("axios");
+// const axios = require("axios");
 const cheerio = require("cheerio");
 require("dotenv").config();
-const scraperapiClient = require("scraperapi-sdk")(`${process.env.PROXY_KEY}`);
 const Meme = require("./models/meme");
 
+const scraperapiClient = require("scraperapi-sdk")(`${process.env.PROXY_KEY}`);
 const urls = {
   jbzUrl: "https://jbzd.com.pl/str/{page}",
 };
-
-// const fetchHtml = async (url) => {
-//   try {
-//     const { data } = await axios.get(url);
-//     return data;
-//   } catch {
-//     console.error(
-//       `ERROR: An error occurred while trying to fetch the URL: ${url}`
-//     );
-//   }
-// };
-
+//
+// // const fetchHtml = async (url) => {
+// //   try {
+// //     const { data } = await axios.get(url);
+// //     return data;
+// //   } catch {
+// //     console.error(
+// //       `ERROR: An error occurred while trying to fetch the URL: ${url}`
+// //     );
+// //   }
+// // };
+//
 const fetchPages = async () => {
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 2; i++) {
     await fetchScrap(urls.jbzUrl.replace("{page}", i));
   }
 };
@@ -57,7 +57,7 @@ const saveObjectToDatabase = async (dataObject) => {
     photoUrl: dataObject.photoUrl,
   });
 
-  await newMeme.save();
+//     await newMeme.save();
 };
 
-module.export = fetchPages();
+module.exports = fetchPages();
