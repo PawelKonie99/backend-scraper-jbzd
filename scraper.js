@@ -18,13 +18,13 @@ const urls = {
 //   }
 // };
 
-const getAllInformations = async (sinlgleArtcile) => {
+const getAllInformations = async (singleArticle) => {
   //   const allImagesOnPage = $.find("a > img");
   //   const test = scope.$;
-  const imageTitle = sinlgleArtcile.find("h3 > a").text();
+  const imageTitle = singleArticle.find("h3 > a").text();
   console.log(imageTitle);
 
-  const photoUrl = sinlgleArtcile.find("a > img").attr("src");
+  const photoUrl = singleArticle.find("a > img").attr("src");
   console.log(photoUrl);
 
   //   for (singleTitle of allTitles) {

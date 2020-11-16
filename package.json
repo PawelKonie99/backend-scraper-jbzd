@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node scraper.js"
+    "start": "node scraper.js",
+    "start2": "node index.js"
   },
   "keywords": [],
   "author": "",
@@ -12,7 +13,10 @@
   "dependencies": {
     "axios": "^0.21.0",
     "cheerio": "^1.0.0-rc.3",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.10.14",
     "scraperapi-sdk": "^1.0.6"
   }
 }
