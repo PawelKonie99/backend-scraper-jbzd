@@ -22,4 +22,4 @@ memeSchema.set("toJSON", {
   },
 });
 
-module.exports = mongoose.model("person", memeSchema);
+module.exports = mongoose.model("meme", memeSchema);

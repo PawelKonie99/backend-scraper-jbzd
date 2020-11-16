@@ -1,10 +1,11 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
-equire("dotenv").config();
+require("dotenv").config();
 const scraperapiClient = require("scraperapi-sdk")(`${process.env.PROXY_KEY}`);
+const Meme = require("./models/meme");
 
 const urls = {
-  jbzUrl: "https://jbzd.com.pl/",
+  jbzUrl: "https://jbzd.com.pl/str/{page}",
 };
 
 // const fetchHtml = async (url) => {
@@ -18,24 +19,14 @@ const urls = {
 //   }
 // };
 
-const getAllInformations = async (singleArticle) => {
-  //   const allImagesOnPage = $.find("a > img");
-  //   const test = scope.$;
-  const imageTitle = singleArticle.find("h3 > a").text();
-  console.log(imageTitle);
-
-  const photoUrl = singleArticle.find("a > img").attr("src");
-  console.log(photoUrl);
-
-  //   for (singleTitle of allTitles) {
-  //     const title = $(singleTitle).text();
-  //     console.log(title);
-  //   }
-  //   console.log(allTitles);
+const fetchPages = async () => {
+  for (let i = 0; i < 10; i++) {
+    await fetchScrap(urls.jbzUrl.replace("{page}", i));
+  }
 };
 
-const fetchScrap = async () => {
-  const html = await scraperapiClient.get(urls.jbzUrl);
+const fetchScrap = async (url) => {
+  const html = await scraperapiClient.get(url);
   const $ = cheerio.load(html);
 
   const allArtciles = $(".article-content").toArray();
@@ -45,4 +36,28 @@ const fetchScrap = async () => {
   }
 };
 
-fetchScrap();
+const getAllInformations = async (singleArticle) => {
+  const imageTitle = await singleArticle.find("h3 > a").text().trim();
+  console.log(imageTitle);
+
+  const photoUrl = await singleArticle.find("a > img").attr("src");
+  console.log(photoUrl);
+
+  let dataObject = {
+    title: imageTitle,
+    photoUrl: photoUrl,
+  };
+
+  await saveObjectToDatabase(dataObject);
+};
+
+const saveObjectToDatabase = async (dataObject) => {
+  const newMeme = new Meme({
+    title: dataObject.title,
+    photoUrl: dataObject.photoUrl,
+  });
+
+  await newMeme.save();
+};
+
+module.export = fetchPages();

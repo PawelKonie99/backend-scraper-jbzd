@@ -5,6 +5,7 @@ const logger = require("./utils/logger");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const middleware = require("./utils/middleware");
+const startScrap = require("./scraper");
 
 logger.info("connecting to database");
 
@@ -23,6 +24,7 @@ mongoose
   });
 
 app.use(cors());
+startScrap;
 
 app.use(middleware.unknownRequest);
 

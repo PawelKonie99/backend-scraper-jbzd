@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node scraper.js",
+    "start": "node index.js",
     "start2": "node index.js"
   },
   "keywords": [],
@@ -17,6 +17,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "mongoose": "^5.10.14",
+    "mongoose-unique-validator": "^2.0.3",
     "scraperapi-sdk": "^1.0.6"
   }
 }
