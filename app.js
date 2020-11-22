@@ -26,11 +26,11 @@ mongoose
   });
 
 app.use(cors());
-app.use("", notesRouter);
+app.use("/memes", notesRouter);
 
 if (process.env.NODE_ENV === "scrap") {
-    const startScrap = require("./scraper");
-    startScrap;
+  const startScrap = require("./scraper");
+  startScrap;
 }
 
 app.use(middleware.unknownRequest);
