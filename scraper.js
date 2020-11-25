@@ -63,13 +63,11 @@ const saveObjectToDatabase = async (dataObject) => {
     return;
   }
 
-  //Here we are checking if photo exist in db, if yes dont save just return
-  if (await Meme.collection.findOne({ photoUrl: newMeme.photoUrl })) {
+  try {
+    await newMeme.save();
+  } catch (err) {
     logger.info("Meme already in database");
-    return;
   }
-
-  await newMeme.save();
 };
 
 module.exports = fetchPages();

@@ -8,7 +8,6 @@ notesRouter.get("/", async (req, res) => {
 
 notesRouter.get("/:id", async (req, res) => {
   const id = req.params.id;
-  console.log(id);
   const result = await Meme.findById(id);
   res.json(result);
 });

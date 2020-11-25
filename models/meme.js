@@ -9,6 +9,7 @@ const memeSchema = mongoose.Schema({
   photoUrl: {
     type: String,
     required: true,
+    unique: true,
   },
 });
 
