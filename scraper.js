@@ -21,10 +21,11 @@ const urls = {
 // // };
 //
 const fetchPages = async () => {
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 2; i++) {
     await fetchScrap(urls.jbzUrl.replace("{page}", i));
   }
   logger.info("SCRAPER END WORK");
+  return process.exit(0);
 };
 
 const fetchScrap = async (url) => {
