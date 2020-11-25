@@ -2,6 +2,7 @@
 const cheerio = require("cheerio");
 require("dotenv").config();
 const Meme = require("./models/meme");
+const logger = require("./utils/logger");
 
 const scraperapiClient = require("scraperapi-sdk")(`${process.env.PROXY_KEY}`);
 const urls = {
@@ -20,9 +21,10 @@ const urls = {
 // // };
 //
 const fetchPages = async () => {
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 3; i++) {
     await fetchScrap(urls.jbzUrl.replace("{page}", i));
   }
+  logger.info("SCRAPER END WORK");
 };
 
 const fetchScrap = async (url) => {
@@ -57,7 +59,17 @@ const saveObjectToDatabase = async (dataObject) => {
     photoUrl: dataObject.photoUrl,
   });
 
-//     await newMeme.save();
+  if (newMeme.photoUrl === undefined) {
+    return;
+  }
+
+  //Here we are checking if photo exist in db, if yes dont save just return
+  if (await Meme.collection.findOne({ photoUrl: newMeme.photoUrl })) {
+    logger.info("Meme already in database");
+    return;
+  }
+
+  await newMeme.save();
 };
 
 module.exports = fetchPages();
