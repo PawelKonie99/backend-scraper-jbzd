@@ -7,6 +7,7 @@ const cors = require("cors");
 const middleware = require("./utils/middleware");
 // const startScrap = require("./scraper");
 const notesRouter = require("./controllers/memes");
+const JbzScraper = require("./scraper");
 require("dotenv").config();
 
 logger.info("connecting to database");
@@ -27,10 +28,10 @@ mongoose
 
 app.use(cors());
 app.use("/memes", notesRouter);
+const jbzScraper = new JbzScraper();
 
 if (process.env.NODE_ENV === "scrap") {
-  const startScrap = require("./scraper");
-  startScrap;
+  jbzScraper.fetchPages();
 }
 
 app.use(middleware.unknownRequest);
