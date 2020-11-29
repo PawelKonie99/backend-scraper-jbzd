@@ -7,8 +7,12 @@ const cors = require("cors");
 const middleware = require("./utils/middleware");
 // const startScrap = require("./scraper");
 const notesRouter = require("./controllers/memes");
-const JbzScraper = require("./scraper");
+const JbzScraper = require("./jebzdzidy");
+const KwejkScraper = require("./kwejk");
 require("dotenv").config();
+
+const jbzScraper = new JbzScraper();
+const kwejkScraper = new KwejkScraper();
 
 logger.info("connecting to database");
 
@@ -28,10 +32,10 @@ mongoose
 
 app.use(cors());
 app.use("/memes", notesRouter);
-const jbzScraper = new JbzScraper();
 
 if (process.env.NODE_ENV === "scrap") {
-  jbzScraper.fetchPages();
+  // jbzScraper.fetchPages();
+  kwejkScraper.fetchPageParam();
 }
 
 app.use(middleware.unknownRequest);

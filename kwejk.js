@@ -6,25 +6,25 @@ const logger = require("./utils/logger");
 
 const scraperapiClient = require("scraperapi-sdk")(`${process.env.PROXY_KEY}`);
 const urls = {
-  jbzUrl: "https://jbzd.com.pl/str/{page}",
+  kwejkUrl: "https://kwejk.pl",
+  nextPageUrl: "https://kwejk.pl/strona/{number}",
 };
 
-class JbzScraper {
-  //
-  // // const fetchHtml = async (url) => {
-  // //   try {
-  // //     const { data } = await axios.get(url);
-  // //     return data;
-  // //   } catch {
-  // //     console.error(
-  // //       `ERROR: An error occurred while trying to fetch the URL: ${url}`
-  // //     );
-  // //   }
-  // // };
-  //
-  fetchPages = async () => {
-    for (let i = 0; i < 2; i++) {
-      await this.fetchScrap(urls.jbzUrl.replace("{page}", i));
+class KwejkScraper {
+  fetchPageParam = async () => {
+    const html = await scraperapiClient.get(urls.kwejkUrl);
+    const $ = cheerio.load(html);
+
+    const nextPageUrl = $(".btn.btn-gold.btn-next").attr("href");
+    const pageNumber = nextPageUrl.slice(-5);
+
+    this.fetchPages(pageNumber);
+  };
+
+  fetchPages = async (pageNumber) => {
+    const pageCount = parseInt(pageNumber) + 1;
+    for (let i = pageCount; i > pageCount - 3; i--) {
+      await this.fetchScrap(urls.nextPageUrl.replace("{number}", i));
     }
     logger.info("SCRAPER END WORK");
     return process.exit(0);
@@ -34,7 +34,7 @@ class JbzScraper {
     const html = await scraperapiClient.get(url);
     const $ = cheerio.load(html);
 
-    const allArtciles = $(".article-content").toArray();
+    const allArtciles = $(".box.fav.picture").toArray();
 
     for (const singleArticle of allArtciles) {
       await this.getAllInformations($(singleArticle));
@@ -42,11 +42,10 @@ class JbzScraper {
   };
 
   getAllInformations = async (singleArticle) => {
-    const imageTitle = await singleArticle.find("h3 > a").text().trim();
-    console.log(imageTitle);
+    const imageTitle = await singleArticle.find("h2 > a").text().trim();
+    const photoUrl = await singleArticle.find("figure > a > img").attr("src");
 
-    const photoUrl = await singleArticle.find("a > img").attr("src");
-    console.log(photoUrl);
+    logger.info({ imageTitle: imageTitle, photoUrl: photoUrl });
 
     let dataObject = {
       title: imageTitle,
@@ -67,11 +66,11 @@ class JbzScraper {
     }
 
     try {
-      await newMeme.save();
+      //   await newMeme.save();
     } catch (err) {
       logger.error("Meme already in database");
     }
   };
 }
 
-module.exports = JbzScraper;
+module.exports = KwejkScraper;
