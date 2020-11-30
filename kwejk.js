@@ -27,7 +27,6 @@ class KwejkScraper {
       await this.fetchScrap(urls.nextPageUrl.replace("{number}", i));
     }
     logger.info("KWEJK SCRAPER END WORK");
-    return process.exit(0);
   };
 
   fetchScrap = async (url) => {

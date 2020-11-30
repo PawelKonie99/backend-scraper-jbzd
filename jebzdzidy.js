@@ -27,7 +27,6 @@ class JbzScraper {
       await this.fetchScrap(urls.jbzUrl.replace("{page}", i));
     }
     logger.info("JEBZDZIDY SCRAPER END WORK");
-    return process.exit(0);
   };
 
   fetchScrap = async (url) => {

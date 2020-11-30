@@ -39,6 +39,7 @@ const paginatedResults = (model, websiteName) => {
     try {
       results.results = await model
         .find({ website: websiteName })
+        .sort({ $natural: -1 })
         .limit(limit)
         .skip(startIndex)
         .exec();

@@ -37,6 +37,7 @@ if (process.env.NODE_ENV === "scrap") {
   const runScrap = async () => {
     await kwejkScraper.fetchPageParam();
     await jbzScraper.fetchPages();
+    return process.exit(0);
   };
   runScrap();
 }
