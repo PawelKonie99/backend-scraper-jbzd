@@ -23,6 +23,7 @@ class JbzScraper {
   // // };
   //
   fetchPages = async () => {
+    console.log("test");
     for (let i = 0; i < 2; i++) {
       await this.fetchScrap(urls.jbzUrl.replace("{page}", i));
     }
