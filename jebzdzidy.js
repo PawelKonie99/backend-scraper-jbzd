@@ -26,7 +26,7 @@ class JbzScraper {
     for (let i = 0; i < 2; i++) {
       await this.fetchScrap(urls.jbzUrl.replace("{page}", i));
     }
-    logger.info("SCRAPER END WORK");
+    logger.info("JEBZDZIDY SCRAPER END WORK");
     return process.exit(0);
   };
 
@@ -45,7 +45,11 @@ class JbzScraper {
     const imageTitle = await singleArticle.find("h3 > a").text().trim();
     const photoUrl = await singleArticle.find("a > img").attr("src");
 
-    logger.info({ imageTitle: imageTitle, photoUrl: photoUrl });
+    logger.info({
+      imageTitle: imageTitle,
+      photoUrl: photoUrl,
+      scraper: "jebzdzidy",
+    });
 
     let dataObject = {
       title: imageTitle,
@@ -59,6 +63,7 @@ class JbzScraper {
     const newMeme = new Meme({
       title: dataObject.title,
       photoUrl: dataObject.photoUrl,
+      website: "jebzdzidy",
     });
 
     if (newMeme.photoUrl === undefined) {

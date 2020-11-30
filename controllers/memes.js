@@ -6,10 +6,21 @@ const middleware = require("../utils/middleware");
 //   const memes = await Meme.find({});
 //   res.json(memes);
 // });
+notesRouter.get(
+  "/kwejk",
+  middleware.paginatedResults(Meme, "kwejk"),
+  (req, res) => {
+    res.json(res.paginatedResults);
+  }
+);
 
-notesRouter.get("/", middleware.paginatedResults(Meme), (req, res) => {
-  res.json(res.paginatedResults);
-});
+notesRouter.get(
+  "/jebzdzidy",
+  middleware.paginatedResults(Meme, "jebzdzidy"),
+  (req, res) => {
+    res.json(res.paginatedResults);
+  }
+);
 
 notesRouter.get("/:id", async (req, res) => {
   const id = req.params.id;

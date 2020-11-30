@@ -11,6 +11,10 @@ const memeSchema = mongoose.Schema({
     required: true,
     unique: true,
   },
+  website: {
+    type: String,
+    required: true,
+  },
 });
 
 memeSchema.plugin(uniqueValidator);

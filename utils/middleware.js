@@ -12,7 +12,7 @@ const unknownRequest = (req, res) => {
   res.status(404).send({ error: "Unknow endpoint" });
 };
 
-const paginatedResults = (model) => {
+const paginatedResults = (model, websiteName) => {
   return async (req, res, next) => {
     const page = parseInt(req.query.page);
     const limit = parseInt(req.query.limit);
@@ -37,7 +37,11 @@ const paginatedResults = (model) => {
     }
 
     try {
-      results.results = await model.find().limit(limit).skip(startIndex).exec();
+      results.results = await model
+        .find({ website: websiteName })
+        .limit(limit)
+        .skip(startIndex)
+        .exec();
       res.paginatedResults = results;
       next();
     } catch (error) {

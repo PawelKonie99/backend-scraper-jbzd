@@ -34,8 +34,11 @@ app.use(cors());
 app.use("/memes", notesRouter);
 
 if (process.env.NODE_ENV === "scrap") {
-  // jbzScraper.fetchPages();
-  kwejkScraper.fetchPageParam();
+  const runScrap = async () => {
+    await kwejkScraper.fetchPageParam();
+    await jbzScraper.fetchPages();
+  };
+  runScrap();
 }
 
 app.use(middleware.unknownRequest);

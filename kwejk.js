@@ -23,10 +23,10 @@ class KwejkScraper {
 
   fetchPages = async (pageNumber) => {
     const pageCount = parseInt(pageNumber) + 1;
-    for (let i = pageCount; i > pageCount - 3; i--) {
+    for (let i = pageCount; i > pageCount - 2; i--) {
       await this.fetchScrap(urls.nextPageUrl.replace("{number}", i));
     }
-    logger.info("SCRAPER END WORK");
+    logger.info("KWEJK SCRAPER END WORK");
     return process.exit(0);
   };
 
@@ -45,7 +45,11 @@ class KwejkScraper {
     const imageTitle = await singleArticle.find("h2 > a").text().trim();
     const photoUrl = await singleArticle.find("figure > a > img").attr("src");
 
-    logger.info({ imageTitle: imageTitle, photoUrl: photoUrl });
+    logger.info({
+      imageTitle: imageTitle,
+      photoUrl: photoUrl,
+      scraper: "kwejk",
+    });
 
     let dataObject = {
       title: imageTitle,
@@ -59,6 +63,7 @@ class KwejkScraper {
     const newMeme = new Meme({
       title: dataObject.title,
       photoUrl: dataObject.photoUrl,
+      website: "kwejk",
     });
 
     if (newMeme.photoUrl === undefined) {
@@ -66,7 +71,7 @@ class KwejkScraper {
     }
 
     try {
-      //   await newMeme.save();
+      await newMeme.save();
     } catch (err) {
       logger.error("Meme already in database");
     }
