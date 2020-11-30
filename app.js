@@ -31,6 +31,7 @@ mongoose
   });
 
 app.use(cors());
+app.use(express.static("build"));
 app.use("/memes", notesRouter);
 
 if (process.env.NODE_ENV === "scrap") {
