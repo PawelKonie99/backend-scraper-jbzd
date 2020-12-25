@@ -19,6 +19,7 @@ memeRouter.get(
   "/jebzdzidy",
   middleware.paginatedResults(Meme, "jebzdzidy"),
   (req, res) => {
+    console.log("sending dzida");
     res.json(res.paginatedResults);
   }
 );
