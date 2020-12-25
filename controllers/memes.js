@@ -29,8 +29,8 @@ memeRouter.get("/:id", async (req, res) => {
   res.json(result);
 });
 
-memeRouter.get("/*", async (req, res) => {
-  const index = path.join(__dirname, "../build", "index.html");
+memeRouter.get("*", async (req, res) => {
+  const index = path.join(__dirname + "../build", "index.html");
   res.sendFile(index);
 });
 
