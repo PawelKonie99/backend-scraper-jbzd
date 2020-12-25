@@ -33,9 +33,7 @@ mongoose
 app.use(cors());
 app.use(express.static("build"));
 app.use("/memes", notesRouter);
-app.get("/*", (req, res) => {
-  res.sendFile(path.resolve(__dirname + "./build/index.html"));
-});
+// app.use(express.static("./build"));
 
 if (process.env.NODE_ENV === "scrap") {
   const runScrap = async () => {
