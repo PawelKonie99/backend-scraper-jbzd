@@ -23,7 +23,7 @@ class KwejkScraper {
 
   fetchPages = async (pageNumber) => {
     const pageCount = parseInt(pageNumber) + 1;
-    for (let i = pageCount; i > pageCount - 2; i--) {
+    for (let i = pageCount; i > pageCount - 6; i--) {
       await this.fetchScrap(urls.nextPageUrl.replace("{number}", i));
     }
     logger.info("KWEJK SCRAPER END WORK");
