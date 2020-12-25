@@ -42,7 +42,7 @@ if (process.env.NODE_ENV === "scrap") {
   };
   runScrap();
 }
-
+app.disable("etag");
 app.use(middleware.unknownRequest);
 
 module.exports = app;
