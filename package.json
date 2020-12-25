@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build:ui": "rm -rf build && cd .. && cd front-jebzdzidy && npm run build --prod && cp -r build ../jebzdzidy-scraper/",
+    "build:ui": "rm -rf build && cd .. && cd scrapers-frontend && npm run build --prod && cp -r build ../scrapers-backend/",
     "start": "cross-env NODE_ENV=development nodemon index.js",
     "scrap": "cross-env NODE_ENV=scrap node index.js"
   },
