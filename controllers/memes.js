@@ -1,4 +1,4 @@
-const notesRouter = require("express").Router();
+const memeRouter = require("express").Router();
 const Meme = require("../models/meme");
 const middleware = require("../utils/middleware");
 const path = require("path");
@@ -7,7 +7,7 @@ const path = require("path");
 //   res.json(memes);
 // });
 
-notesRouter.get(
+memeRouter.get(
   "/kwejk",
   middleware.paginatedResults(Meme, "kwejk"),
   (req, res) => {
@@ -15,7 +15,7 @@ notesRouter.get(
   }
 );
 
-notesRouter.get(
+memeRouter.get(
   "/jebzdzidy",
   middleware.paginatedResults(Meme, "jebzdzidy"),
   (req, res) => {
@@ -23,15 +23,15 @@ notesRouter.get(
   }
 );
 
-notesRouter.get("/:id", async (req, res) => {
+memeRouter.get("/:id", async (req, res) => {
   const id = req.params.id;
   const result = await Meme.findById(id);
   res.json(result);
 });
 
-notesRouter.get("*", async (req, res) => {
+memeRouter.get("/*", async (req, res) => {
   const index = path.join(__dirname, "../build", "index.html");
   res.sendFile(index);
 });
 
-module.exports = notesRouter;
+module.exports = memeRouter;

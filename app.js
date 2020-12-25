@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const middleware = require("./utils/middleware");
 // const startScrap = require("./scraper");
-const notesRouter = require("./controllers/memes");
+const memeRouter = require("./controllers/memes");
 const JbzScraper = require("./jebzdzidy");
 const KwejkScraper = require("./kwejk");
 require("dotenv").config();
@@ -32,8 +32,7 @@ mongoose
 
 app.use(cors());
 app.use(express.static("build"));
-app.use("/memes", notesRouter);
-// app.use(express.static("./build"));
+app.use("/memes", memeRouter);
 
 if (process.env.NODE_ENV === "scrap") {
   const runScrap = async () => {
@@ -43,7 +42,7 @@ if (process.env.NODE_ENV === "scrap") {
   };
   runScrap();
 }
-app.disable("etag");
+
 app.use(middleware.unknownRequest);
 
 module.exports = app;
