@@ -29,7 +29,7 @@ notesRouter.get("/:id", async (req, res) => {
   res.json(result);
 });
 
-notesRouter.get("/*", (req, res) => {
+notesRouter.get("*", (req, res) => {
   const index = path.join(__dirname, "/", "../build", "index.html");
   res.sendFile(index);
 });
