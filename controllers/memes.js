@@ -8,7 +8,7 @@ const path = require("path");
 // });
 
 memeRouter.get(
-  "/kwejk",
+  "/memes/kwejk",
   middleware.paginatedResults(Meme, "kwejk"),
   (req, res) => {
     res.json(res.paginatedResults);
@@ -16,7 +16,7 @@ memeRouter.get(
 );
 
 memeRouter.get(
-  "/jebzdzidy",
+  "/memes/jebzdzidy",
   middleware.paginatedResults(Meme, "jebzdzidy"),
   (req, res) => {
     console.log("sending dzida");
@@ -24,7 +24,7 @@ memeRouter.get(
   }
 );
 
-memeRouter.get("/:id", async (req, res) => {
+memeRouter.get("/memes/:id", async (req, res) => {
   const id = req.params.id;
   const result = await Meme.findById(id);
   res.json(result);
