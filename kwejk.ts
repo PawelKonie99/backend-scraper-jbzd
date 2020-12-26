@@ -1,5 +1,7 @@
 // const axios = require("axios");
-const cheerio = require("cheerio");
+export {};
+import * as cheerio from 'cheerio';
+import {IdataObject} from './utils/interfaces/scraperInterface'
 require("dotenv").config();
 const Meme = require("./models/meme");
 const logger = require("./utils/logger");
@@ -21,15 +23,15 @@ class KwejkScraper {
     this.fetchPages(pageNumber);
   };
 
-  fetchPages = async (pageNumber) => {
+  fetchPages = async (pageNumber: string) => {
     const pageCount = parseInt(pageNumber) + 1;
     for (let i = pageCount; i > pageCount - 6; i--) {
-      await this.fetchScrap(urls.nextPageUrl.replace("{number}", i));
+      await this.fetchScrap(urls.nextPageUrl.replace("{number}", i.toString()));
     }
     logger.info("KWEJK SCRAPER END WORK");
   };
 
-  fetchScrap = async (url) => {
+  fetchScrap = async (url: string) => {
     const html = await scraperapiClient.get(url);
     const $ = cheerio.load(html);
 
@@ -50,7 +52,7 @@ class KwejkScraper {
       scraper: "kwejk",
     });
 
-    let dataObject = {
+    let dataObject:IdataObject = {
       title: imageTitle,
       photoUrl: photoUrl,
     };
@@ -58,7 +60,7 @@ class KwejkScraper {
     await this.saveObjectToDatabase(dataObject);
   };
 
-  saveObjectToDatabase = async (dataObject) => {
+  saveObjectToDatabase = async (dataObject:IdataObject) => {
     const newMeme = new Meme({
       title: dataObject.title,
       photoUrl: dataObject.photoUrl,

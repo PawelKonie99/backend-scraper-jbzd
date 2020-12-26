@@ -1,8 +1,10 @@
+export {};
 // const axios = require("axios");
 const cheerio = require("cheerio");
 require("dotenv").config();
 const Meme = require("./models/meme");
 const logger = require("./utils/logger");
+import {IdataObject} from './utils/interfaces/scraperInterface'
 
 const scraperapiClient = require("scraperapi-sdk")(`${process.env.PROXY_KEY}`);
 const urls = {
@@ -24,12 +26,12 @@ class JbzScraper {
   //
   fetchPages = async () => {
     for (let i = 0; i < 6; i++) {
-      await this.fetchScrap(urls.jbzUrl.replace("{page}", i));
+      await this.fetchScrap(urls.jbzUrl.replace("{page}", i.toString()));
     }
     logger.info("JEBZDZIDY SCRAPER END WORK");
   };
 
-  fetchScrap = async (url) => {
+  fetchScrap = async (url: string) => {
     const html = await scraperapiClient.get(url);
     const $ = cheerio.load(html);
 
@@ -50,7 +52,7 @@ class JbzScraper {
       scraper: "jebzdzidy",
     });
 
-    let dataObject = {
+    let dataObject: IdataObject = {
       title: imageTitle,
       photoUrl: photoUrl,
     };
@@ -58,7 +60,7 @@ class JbzScraper {
     await this.saveObjectToDatabase(dataObject);
   };
 
-  saveObjectToDatabase = async (dataObject) => {
+  saveObjectToDatabase = async (dataObject:IdataObject) => {
     const newMeme = new Meme({
       title: dataObject.title,
       photoUrl: dataObject.photoUrl,

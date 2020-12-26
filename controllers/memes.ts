@@ -1,3 +1,4 @@
+export {};
 const memeRouter = require("express").Router();
 const Meme = require("../models/meme");
 const middleware = require("../utils/middleware");

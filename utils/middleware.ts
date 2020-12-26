@@ -1,4 +1,11 @@
+export {};
 const logger = require("./logger");
+
+interface IResult {
+    next:any,
+    previous:any,
+    results: any
+}
 
 const requestLogger = (request, response, next) => {
   logger.info("Method:", request.method);
@@ -12,7 +19,7 @@ const unknownRequest = (req, res) => {
   res.status(404).send({ error: "Unknow endpoint" });
 };
 
-const paginatedResults = (model, websiteName) => {
+const paginatedResults = (model, websiteName:string) => {
   return async (req, res, next) => {
     const page = parseInt(req.query.page);
     const limit = parseInt(req.query.limit);
@@ -20,7 +27,11 @@ const paginatedResults = (model, websiteName) => {
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
 
-    const results = {};
+    const results: IResult = {
+        next:'',
+        previous:'',
+        results: ''
+    };
 
     if (endIndex < (await model.countDocuments().exec())) {
       results.next = {
