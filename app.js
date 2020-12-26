@@ -32,9 +32,9 @@ mongoose
   });
 
 app.use(cors());
-app.use(express.static("build"));
 // app.use(express.static(path.join(__dirname, "/build")));
 app.use("/memes", memeRouter);
+app.use(express.static("build"));
 
 if (process.env.NODE_ENV === "scrap") {
   const runScrap = async () => {
