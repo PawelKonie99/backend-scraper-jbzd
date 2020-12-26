@@ -32,7 +32,7 @@ memeRouter.get("/:id", async (req, res) => {
 
 memeRouter.get("*", async (req, res) => {
   console.log("sending index.html");
-  const index = path.join(__dirname + "../build", "index.html");
+  const index = path.join(__dirname, "../build", "index.html");
   res.sendFile(index);
 });
 

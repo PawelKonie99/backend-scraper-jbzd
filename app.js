@@ -10,6 +10,7 @@ const memeRouter = require("./controllers/memes");
 const JbzScraper = require("./jebzdzidy");
 const KwejkScraper = require("./kwejk");
 require("dotenv").config();
+const path = require("path");
 
 const jbzScraper = new JbzScraper();
 const kwejkScraper = new KwejkScraper();
@@ -31,7 +32,8 @@ mongoose
   });
 
 app.use(cors());
-app.use(express.static("build"));
+// app.use(express.static("/build"));
+app.use(express.static(path.join(__dirname, "/build")));
 app.use("/memes", memeRouter);
 
 if (process.env.NODE_ENV === "scrap") {
