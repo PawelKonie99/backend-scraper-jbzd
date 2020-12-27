@@ -11,6 +11,7 @@ const memeRouter = require("./controllers/memes");
 const JbzScraper = require("./jebzdzidy");
 const KwejkScraper = require("./kwejk");
 require("dotenv").config();
+import * as cron from 'node-cron'
 // const path = require("path");
 
 
@@ -47,11 +48,23 @@ if (process.env.NODE_ENV === "scrap") {
   runScrap();
 }
 
-const cron = require('node-schedule');
-const rule = new cron.RecurrenceRule();
-rule.hour = 12;
-rule.minute = 0;
-cron.scheduleJob(rule, () => {
+// const cron = require('node-schedule');
+// const rule = new cron.RecurrenceRule();
+// rule.hour = 1;
+// rule.minute = 0;
+// cron.scheduleJob(rule, () => {
+//   console.log('in every hour')
+//   runScrap();
+// });
+
+// var rule = new cron.RecurrenceRule();
+// rule.hour = new cron.Range(0,23,1);
+// rule.minute = 0;
+// cron.scheduleJob(rule, function(){
+//     console.log(new Date(), 'Every 1 hour');
+// });
+
+cron.schedule('0 */4 * * *', () => {
   runScrap();
 });
 
