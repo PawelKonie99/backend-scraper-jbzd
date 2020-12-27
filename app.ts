@@ -64,7 +64,8 @@ if (process.env.NODE_ENV === "scrap") {
 //     console.log(new Date(), 'Every 1 hour');
 // });
 
-cron.schedule('0 */4 * * *', () => {
+cron.schedule('0 */8 * * *', () => {
+  console.log('cron works every hour')
   runScrap();
 });
 
