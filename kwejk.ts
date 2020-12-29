@@ -1,4 +1,3 @@
-// const axios = require("axios");
 export {};
 import * as cheerio from 'cheerio';
 import {IdataObject} from './utils/interfaces/scraperInterface'

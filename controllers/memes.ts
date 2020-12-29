@@ -3,10 +3,6 @@ const memeRouter = require("express").Router();
 const Meme = require("../models/meme");
 const middleware = require("../utils/middleware");
 const path = require("path");
-// notesRouter.get("/", async (req, res) => {
-//   const memes = await Meme.find({});
-//   res.json(memes);
-// });
 
 memeRouter.get(
   "/memes/kwejk",
