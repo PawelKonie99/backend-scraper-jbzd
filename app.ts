@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const middleware = require("./utils/middleware");
 const memeRouter = require("./controllers/memes");
+const loginRouter = require('./controllers/login')
 const usersRouter = require('./controllers/users')
 const JbzScraper = require("./jebzdzidy");
 const KwejkScraper = require("./kwejk");
@@ -40,6 +41,7 @@ app.use(bp.json())
 app.use(bp.urlencoded({ extended: true }))
 app.use("/", memeRouter);
 app.use("/", usersRouter)
+app.use("/", loginRouter)
 
 const runScrap = async () => {
   await kwejkScraper.fetchPageParam();
