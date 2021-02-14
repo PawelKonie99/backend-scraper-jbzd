@@ -46,7 +46,7 @@ if (process.env.NODE_ENV === "scrap") {
   runScrap();
 }
 
-//scrapers are working everyday at 8 am, by powershell script
+//scrapers are working everyday at 8 pm, by powershell script
 // cron.schedule('*/8 * * * *', () => {
 //   console.log('cron works every hour')
 //   runScrap();
