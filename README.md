@@ -8,7 +8,7 @@ frontend - https://github.com/PawelKonie99/scrapers-frontend
 
 * Project was created in nodejs + typescript + mongodb
 
-* Scrapers are scraping in every 8 hours automatically
+* Scrapers are scraping everyday at 8 pm
 
 * Libraries used in project:
 - axios
