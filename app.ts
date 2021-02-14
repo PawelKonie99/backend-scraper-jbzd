@@ -7,14 +7,13 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const middleware = require("./utils/middleware");
 const memeRouter = require("./controllers/memes");
-const loginRouter = require('./controllers/login')
-const usersRouter = require('./controllers/users')
+const loginRouter = require("./controllers/login");
+const usersRouter = require("./controllers/users");
 const JbzScraper = require("./jebzdzidy");
 const KwejkScraper = require("./kwejk");
-const bp = require('body-parser')
+const bp = require("body-parser");
 require("dotenv").config();
 // import * as cron from 'node-cron'
-
 
 const jbzScraper = new JbzScraper();
 const kwejkScraper = new KwejkScraper();
@@ -32,16 +31,17 @@ mongoose
     logger.info("Connected to database!");
   })
   .catch((e: Error) => {
-     logger.error("Error with connecting to database" + e.message);
+    logger.error("Error with connecting to database" + e.message);
   });
 
 app.use(cors());
 app.use(express.static("build"));
-app.use(bp.json())
-app.use(bp.urlencoded({ extended: true }))
+app.use(middleware.tokenExtractor);
+app.use(bp.json());
+app.use(bp.urlencoded({ extended: true }));
 app.use("/", memeRouter);
-app.use("/", usersRouter)
-app.use("/", loginRouter)
+app.use("/", usersRouter);
+app.use("/", loginRouter);
 
 const runScrap = async () => {
   await kwejkScraper.fetchPageParam();

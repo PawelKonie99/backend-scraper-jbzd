@@ -10,6 +10,7 @@ loginRouter.post("/api/login", async (req, res) => {
   const registeredUser: {
     username: string;
     passwordHash: string;
+    _id: string;
   } = await User.findOne({ username: body.username });
   const correctPassword: string = registeredUser
     ? await bcrypt.compare(body.password, registeredUser.passwordHash)
@@ -23,7 +24,7 @@ loginRouter.post("/api/login", async (req, res) => {
 
   const userForToken: { username: string; id: string } = {
     username: registeredUser.username,
-    id: body._id,
+    id: registeredUser._id,
   };
 
   const token = await jwt.sign(userForToken, process.env.SECRET);

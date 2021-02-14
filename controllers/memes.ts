@@ -3,6 +3,13 @@ const memeRouter = require("express").Router();
 const Meme = require("../models/meme");
 const middleware = require("../utils/middleware");
 const path = require("path");
+const jwt = require("jsonwebtoken");
+const User = require("../models/user");
+
+memeRouter.get("/memes/default", async (req, res) => {
+  const memes = await User.find({}).populate("user", { date: 1 });
+  res.jsom(memes);
+});
 
 memeRouter.get(
   "/memes/kwejk",
@@ -31,6 +38,50 @@ memeRouter.get("*", async (req, res) => {
   console.log("sending index.html");
   const index = path.join(__dirname, "../build", "index.html");
   res.sendFile(index);
+});
+
+const validateToken = (req) => {
+  const authorization = req.authorization;
+
+  if (authorization && authorization.startsWith("bearer ")) {
+    return authorization.substring(7);
+  }
+
+  return null;
+};
+
+memeRouter.post("/memes/add", async (req, res) => {
+  const body = req.body;
+  const token: string = validateToken(req);
+  const decodedToken = jwt.verify(token, process.env.SECRET);
+
+  if (!(decodedToken || token)) {
+    res.status(401).json({
+      error: "Token invalid or missing",
+    });
+  }
+
+  const user = await User.findById(decodedToken.id);
+
+  const newMeme = new Meme({
+    title: body.title,
+    photoUrl: body.photoUrl,
+    website: "default",
+    user: user._id,
+  });
+
+  if (newMeme.photoUrl === undefined) {
+    return;
+  }
+
+  try {
+    const newMemeToSave = await newMeme.save();
+    user.memes = user.memes.concat(newMemeToSave._id);
+    await user.save();
+    res.status(201).json(newMemeToSave);
+  } catch (e) {
+    res.send(e);
+  }
 });
 
 module.exports = memeRouter;
