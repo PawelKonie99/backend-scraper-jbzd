@@ -7,10 +7,12 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const middleware = require("./utils/middleware");
 const memeRouter = require("./controllers/memes");
+const usersRouter = require('./controllers/users')
 const JbzScraper = require("./jebzdzidy");
 const KwejkScraper = require("./kwejk");
+const bp = require('body-parser')
 require("dotenv").config();
-import * as cron from 'node-cron'
+// import * as cron from 'node-cron'
 
 
 const jbzScraper = new JbzScraper();
@@ -34,7 +36,10 @@ mongoose
 
 app.use(cors());
 app.use(express.static("build"));
+app.use(bp.json())
+app.use(bp.urlencoded({ extended: true }))
 app.use("/", memeRouter);
+app.use("/", usersRouter)
 
 const runScrap = async () => {
   await kwejkScraper.fetchPageParam();

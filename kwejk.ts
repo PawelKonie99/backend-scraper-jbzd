@@ -1,4 +1,4 @@
-export {};
+// export {};
 import * as cheerio from 'cheerio';
 import {IdataObject} from './utils/interfaces/scraperInterface'
 require("dotenv").config();
