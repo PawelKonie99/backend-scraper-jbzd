@@ -13,6 +13,7 @@ const JbzScraper = require("./jebzdzidy");
 const KwejkScraper = require("./kwejk");
 const bp = require("body-parser");
 require("dotenv").config();
+const schedule = require("node-schedule");
 // import * as cron from 'node-cron'
 
 const jbzScraper = new JbzScraper();
@@ -53,11 +54,15 @@ if (process.env.NODE_ENV === "scrap") {
   runScrap();
 }
 
-//scrapers are working everyday at 8 pm, by powershell script
 // cron.schedule('*/8 * * * *', () => {
 //   console.log('cron works every hour')
 //   runScrap();
 // });
+
+// scrapers are working everyday at 8 pm
+schedule.scheduleJob("0 8 * * *", function () {
+  runScrap();
+});
 
 app.use(middleware.unknownRequest);
 
