@@ -6,9 +6,10 @@ frontend - https://github.com/PawelKonie99/scrapers-frontend
 
 ## Description
 
-* Project was created in nodejs + typescript + mongodb
+* Project was created in nodejs + express + typescript + mongodb
 
-* Scrapers are scraping everyday at 8 pm
+* Scrapers are scraping everyday at 8 am, repository is cloned on raspberry pi, where server is working 24h/day.
+* thanks of that we can shuffle node shedules, scrapers can work, every hour or like in my case everyday.
 
 * Libraries used in project:
 - axios
