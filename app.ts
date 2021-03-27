@@ -47,7 +47,7 @@ app.use("/", loginRouter);
 const runScrap = async () => {
   await kwejkScraper.fetchPageParam();
   await jbzScraper.fetchPages();
-  return process.exit(0);
+  // return process.exit(0);
 };
 
 if (process.env.NODE_ENV === "scrap") {
