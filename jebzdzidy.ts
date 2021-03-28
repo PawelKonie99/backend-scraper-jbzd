@@ -4,7 +4,7 @@ const cheerio = require("cheerio");
 require("dotenv").config();
 const Meme = require("./models/meme");
 const logger = require("./utils/logger");
-import {IdataObject} from './utils/interfaces/scraperInterface'
+import { IdataObject } from "./utils/interfaces/scraperInterface";
 
 const scraperapiClient = require("scraperapi-sdk")(`${process.env.PROXY_KEY}`);
 const urls = {
@@ -28,7 +28,7 @@ class JbzScraper {
     for (let i = 0; i < 6; i++) {
       await this.fetchScrap(urls.jbzUrl.replace("{page}", i.toString()));
     }
-    logger.info("JEBZDZIDY SCRAPER END WORK");
+    logger.info("JEBZDZIDY SCRAPER END WORK", "jebzdzidy");
   };
 
   fetchScrap = async (url: string) => {
@@ -46,11 +46,14 @@ class JbzScraper {
     const imageTitle = await singleArticle.find("h3 > a").text().trim();
     const photoUrl = await singleArticle.find("a > img").attr("src");
 
-    logger.info({
-      imageTitle: imageTitle,
-      photoUrl: photoUrl,
-      scraper: "jebzdzidy",
-    });
+    logger.info(
+      {
+        imageTitle: imageTitle,
+        photoUrl: photoUrl,
+        scraper: "jebzdzidy",
+      },
+      "jebzdzidy"
+    );
 
     let dataObject: IdataObject = {
       title: imageTitle,
@@ -60,7 +63,7 @@ class JbzScraper {
     await this.saveObjectToDatabase(dataObject);
   };
 
-  saveObjectToDatabase = async (dataObject:IdataObject) => {
+  saveObjectToDatabase = async (dataObject: IdataObject) => {
     const newMeme = new Meme({
       title: dataObject.title,
       photoUrl: dataObject.photoUrl,
@@ -74,7 +77,7 @@ class JbzScraper {
     try {
       await newMeme.save();
     } catch (err) {
-      logger.error("Meme already in database");
+      logger.error("Meme already in database", "jebzdzidy");
     }
   };
 }

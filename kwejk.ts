@@ -1,6 +1,6 @@
 // export {};
-import * as cheerio from 'cheerio';
-import {IdataObject} from './utils/interfaces/scraperInterface'
+import * as cheerio from "cheerio";
+import { IdataObject } from "./utils/interfaces/scraperInterface";
 require("dotenv").config();
 const Meme = require("./models/meme");
 const logger = require("./utils/logger");
@@ -27,7 +27,7 @@ class KwejkScraper {
     for (let i = pageCount; i > pageCount - 6; i--) {
       await this.fetchScrap(urls.nextPageUrl.replace("{number}", i.toString()));
     }
-    logger.info("KWEJK SCRAPER END WORK");
+    logger.info("KWEJK SCRAPER END WORK", "kwejk");
   };
 
   fetchScrap = async (url: string) => {
@@ -45,13 +45,16 @@ class KwejkScraper {
     const imageTitle = await singleArticle.find("h2 > a").text().trim();
     const photoUrl = await singleArticle.find("figure > a > img").attr("src");
 
-    logger.info({
-      imageTitle: imageTitle,
-      photoUrl: photoUrl,
-      scraper: "kwejk",
-    });
+    logger.info(
+      {
+        imageTitle: imageTitle,
+        photoUrl: photoUrl,
+        scraper: "kwejk",
+      },
+      "kwejk"
+    );
 
-    let dataObject:IdataObject = {
+    let dataObject: IdataObject = {
       title: imageTitle,
       photoUrl: photoUrl,
     };
@@ -59,7 +62,7 @@ class KwejkScraper {
     await this.saveObjectToDatabase(dataObject);
   };
 
-  saveObjectToDatabase = async (dataObject:IdataObject) => {
+  saveObjectToDatabase = async (dataObject: IdataObject) => {
     const newMeme = new Meme({
       title: dataObject.title,
       photoUrl: dataObject.photoUrl,
@@ -73,7 +76,7 @@ class KwejkScraper {
     try {
       await newMeme.save();
     } catch (err) {
-      logger.error("Meme already in database");
+      logger.error("Meme already in database", "kwejk");
     }
   };
 }
