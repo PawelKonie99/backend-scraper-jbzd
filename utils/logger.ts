@@ -17,12 +17,19 @@ const info = (params: string[], lvl: string = "info") => {
 
   const logObjectToString = `${JSON.stringify(logObject)} \r\n`;
 
+  const todayDate = moment().format("DD:MM:YYYY").replace(":", "");
+
   try {
-    fs.appendFile(`utils/logs/${lvl}.txt`, logObjectToString, function (err) {
-      if (err) return console.log(err);
-    });
+    const logStream = fs.createWriteStream(
+      `utils/logs/${lvl}${todayDate}.txt`,
+      {
+        flags: "a",
+      }
+    );
+    logStream.write(logObjectToString);
+    logStream.end("\r\n");
   } catch (e) {
-    console.log(e);
+    error(e);
   }
 };
 
@@ -43,12 +50,16 @@ const error = (...params: string[]) => {
 
   const logObjectToString = `${JSON.stringify(logObject)} \r\n`;
 
+  const todayDate = moment().format("DD:MM:YYYY").replace(":", "");
+
   try {
-    fs.appendFile(`utils/logs/error.txt`, logObjectToString, function (err) {
-      if (err) return console.log(err);
+    const logStream = fs.createWriteStream(`utils/logs/error${todayDate}.txt`, {
+      flags: "a",
     });
+    logStream.write(logObjectToString);
+    logStream.end("\r\n");
   } catch (e) {
-    console.log(e);
+    error(e);
   }
 };
 
