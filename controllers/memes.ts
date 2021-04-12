@@ -50,6 +50,10 @@ const validateToken = (req) => {
   return null;
 };
 
+// memeRouter.get("/memes/newmeme", async (req, res) => {
+//   console.log("elo");
+// });
+
 memeRouter.post("/memes/add", async (req, res) => {
   const body = req.body;
   const token: string = validateToken(req);
