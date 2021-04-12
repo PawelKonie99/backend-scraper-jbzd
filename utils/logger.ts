@@ -50,7 +50,7 @@ const error = (...params: string[]) => {
 
   const logObjectToString = `${JSON.stringify(logObject)} \r\n`;
 
-  const todayDate = moment().format("DD:MM:YYYY").replace(":", "");
+  const todayDate = moment().format("DD:MM").replace(":", "");
 
   try {
     const logStream = fs.createWriteStream(`utils/logs/error${todayDate}.txt`, {
