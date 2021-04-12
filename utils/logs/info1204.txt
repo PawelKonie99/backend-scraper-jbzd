@@ -1,0 +1,6 @@
+{"message":"\"connecting to database\"","date":"April 12th 2021, 8:09:46 pm"} 
+{"message":"\"Server is running on port 3005\"","date":"April 12th 2021, 8:09:46 pm"} 
+
+
+{"message":"\"Connected to database!\"","date":"April 12th 2021, 8:09:48 pm"} 
+
