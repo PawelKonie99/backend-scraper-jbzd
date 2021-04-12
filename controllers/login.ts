@@ -3,6 +3,7 @@ const loginRouter = require("express").Router();
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 loginRouter.post("/api/login", async (req, res) => {
   const body = req.body;

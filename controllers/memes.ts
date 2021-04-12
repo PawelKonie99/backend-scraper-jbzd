@@ -12,9 +12,18 @@ memeRouter.get("/memes/default", async (req, res) => {
 });
 
 memeRouter.get(
+  "/memes/user",
+  middleware.paginatedResults(Meme, "default"),
+  (req, res) => {
+    res.json(res.paginatedResults);
+  }
+);
+
+memeRouter.get(
   "/memes/kwejk",
   middleware.paginatedResults(Meme, "kwejk"),
   (req, res) => {
+    console.log("sending kwejk");
     res.json(res.paginatedResults);
   }
 );
