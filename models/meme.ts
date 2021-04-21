@@ -16,6 +16,12 @@ const memeSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  buffer: {
+    type: Buffer,
+  },
+  mimeType: {
+    type: String,
+  },
   user: [
     {
       type: mongoose.Schema.Types.ObjectId,

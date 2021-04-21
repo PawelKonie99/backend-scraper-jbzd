@@ -5,16 +5,30 @@ const middleware = require("../utils/middleware");
 const path = require("path");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+const fs = require("fs");
+const mongoBinary = require("mongodb").Binary;
+
+var multer = require("multer");
+var upload = multer({ dest: "uploads/" });
 
 memeRouter.get("/memes/default", async (req, res) => {
   const memes = await User.find({}).populate("user", { date: 1 });
-  res.jsom(memes);
+  res.json(memes);
 });
 
 memeRouter.get(
   "/memes/user",
   middleware.paginatedResults(Meme, "default"),
   (req, res) => {
+    res.json(res.paginatedResults);
+  }
+);
+
+memeRouter.get(
+  "/memes/usersMemes",
+  middleware.paginatedResults(Meme, "default"),
+  (req, res) => {
+    console.log("sending default");
     res.json(res.paginatedResults);
   }
 );
@@ -63,8 +77,23 @@ const validateToken = (req) => {
 //   console.log("elo");
 // });
 
-memeRouter.post("/memes/add", async (req, res) => {
-  const body = req.body;
+memeRouter.post("/memes/add", upload.single("newMeme"), async (req, res) => {
+  const file = req.file;
+  let imageBuffer;
+
+  if (!file) {
+    console.log("Please upload file");
+    return;
+  }
+
+  fs.readFile(req.file.path, function (err, data) {
+    if (err) throw err;
+    // data will contain your file contents
+    // console.log("the data is : ", data);
+    imageBuffer = data;
+  });
+
+  // const body = req.body;
   const token: string = validateToken(req);
   const decodedToken = jwt.verify(token, process.env.SECRET);
 
@@ -77,10 +106,12 @@ memeRouter.post("/memes/add", async (req, res) => {
   const user = await User.findById(decodedToken.id);
 
   const newMeme = new Meme({
-    title: body.title,
-    photoUrl: body.photoUrl,
+    title: req.body.title,
+    photoUrl: req.file.filename,
     website: "default",
     user: user._id,
+    mimeType: req.file.mimetype,
+    buffer: mongoBinary(imageBuffer),
   });
 
   if (newMeme.photoUrl === undefined) {
