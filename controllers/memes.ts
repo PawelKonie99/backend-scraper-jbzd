@@ -86,6 +86,11 @@ memeRouter.post("/memes/add", upload.single("newMeme"), async (req, res) => {
     return;
   }
 
+  if (req.file.originalname.match(/jfif/i)) {
+    console.log("Wrong file type");
+    return;
+  }
+
   fs.readFile(req.file.path, function (err, data) {
     if (err) throw err;
     // data will contain your file contents
