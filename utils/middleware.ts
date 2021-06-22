@@ -1,5 +1,5 @@
 export {};
-import { info } from "./logger";
+const logger = require("./logger");
 
 interface IResult {
   next: any;
@@ -7,26 +7,26 @@ interface IResult {
   results: any;
 }
 
-export const tokenExtractor = async (request, response, next) => {
+const tokenExtractor = async (request, response, next) => {
   const authorization = await request.get("authorization");
   request["authorization"] = authorization;
 
   next();
 };
 
-export const requestLogger = (request, response, next) => {
-  info(["Method:"], request.method);
-  info(["Path:  "], request.path);
-  info(["Body:  "], request.body);
-  info(["---"]);
+const requestLogger = (request, response, next) => {
+  logger.info("Method:", request.method);
+  logger.info("Path:  ", request.path);
+  logger.info("Body:  ", request.body);
+  logger.info("---");
   next();
 };
 
-export const unknownRequest = (req, res) => {
+const unknownRequest = (req, res) => {
   res.status(404).send({ error: "Unknow endpoint" });
 };
 
-export const paginatedResults = (model, websiteName: string) => {
+const paginatedResults = (model, websiteName: string) => {
   return async (req, res, next) => {
     const page = parseInt(req.query.page);
     const limit = parseInt(req.query.limit);
@@ -67,4 +67,11 @@ export const paginatedResults = (model, websiteName: string) => {
       res.status(500).json({ message: error.message });
     }
   };
+};
+
+module.exports = {
+  requestLogger,
+  unknownRequest,
+  paginatedResults,
+  tokenExtractor,
 };

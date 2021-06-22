@@ -11,7 +11,7 @@ const urls = {
   nextPageUrl: "https://kwejk.pl/strona/{number}",
 };
 
-export class KwejkScraper {
+class KwejkScraper {
   fetchPageParam = async () => {
     const html = await scraperapiClient.get(urls.kwejkUrl);
     const $ = cheerio.load(html);
@@ -81,3 +81,4 @@ export class KwejkScraper {
   };
 }
 
+module.exports = KwejkScraper;

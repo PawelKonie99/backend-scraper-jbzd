@@ -1,6 +1,6 @@
 export {};
-import * as mongoose from "mongoose";
-import * as uniqueValidator from "mongoose-unique-validator";
+const mongoose = require("mongoose");
+const uniqueValidator = require("mongoose-unique-validator");
 
 const memeSchema = mongoose.Schema({
   title: {
