@@ -1,7 +1,7 @@
 const fs = require("fs");
 const moment = require("moment");
 
-const info = (params: string[], lvl: string = "info") => {
+export const info = (params: string[], lvl: string = "info") => {
   console.log();
   console.log("===================================================");
   console.log(params);
@@ -20,12 +20,9 @@ const info = (params: string[], lvl: string = "info") => {
   const todayDate = moment().format("DD:MM").replace(":", "");
 
   try {
-    const logStream = fs.createWriteStream(
-      `utils/logs/${lvl}${todayDate}.txt`,
-      {
-        flags: "a",
-      }
-    );
+    const logStream = fs.createWriteStream(`utils/logs/${lvl}${todayDate}.txt`, {
+      flags: "a",
+    });
     logStream.write(logObjectToString);
     logStream.end("\r\n");
   } catch (e) {
@@ -33,7 +30,7 @@ const info = (params: string[], lvl: string = "info") => {
   }
 };
 
-const error = (...params: string[]) => {
+export const error = (...params: string[]) => {
   console.log();
   console.log("===================================================");
   console.log("ERROR");
@@ -61,9 +58,4 @@ const error = (...params: string[]) => {
   } catch (e) {
     error(e);
   }
-};
-
-module.exports = {
-  info,
-  error,
 };

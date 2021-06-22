@@ -11,7 +11,7 @@ const urls = {
   jbzUrl: "https://jbzd.com.pl/str/{page}",
 };
 
-class JbzScraper {
+export class JbzScraper {
   //
   // // const fetchHtml = async (url) => {
   // //   try {
@@ -82,4 +82,3 @@ class JbzScraper {
   };
 }
 
-module.exports = JbzScraper;

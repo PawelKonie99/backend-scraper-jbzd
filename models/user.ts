@@ -1,6 +1,6 @@
 export {};
-const mongoose = require("mongoose");
-const uniqueValidator = require("mongoose-unique-validator");
+import * as mongoose from "mongoose";
+import * as uniqueValidator from "mongoose-unique-validator";
 
 const userSchema = mongoose.Schema({
   username: {

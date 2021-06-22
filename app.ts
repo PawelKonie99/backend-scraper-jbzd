@@ -1,43 +1,45 @@
 export {};
-const config = require("./utils/config");
-const express = require("express");
-const app = express();
-const logger = require("./utils/logger");
-const mongoose = require("mongoose");
-const cors = require("cors");
-const middleware = require("./utils/middleware");
-const memeRouter = require("./controllers/memes");
-const loginRouter = require("./controllers/login");
-const usersRouter = require("./controllers/users");
-const JbzScraper = require("./jebzdzidy");
-const KwejkScraper = require("./kwejk");
-const bp = require("body-parser");
+import * as helmet from "helmet";
+import * as express from "express";
+import * as mongoose from "mongoose";
+import * as cors from "cors";
+import * as bp from "body-parser";
+import * as schedule from "node-schedule";
+import { MONGO_URL } from "./utils/config";
+import { info, error } from "./utils/logger";
+import { unknownRequest, tokenExtractor } from "./utils/middleware";
+import { memeRouter } from "./controllers/memes";
+import { loginRouter } from "./controllers/login";
+import { usersRouter } from "./controllers/users";
+import { JbzScraper } from "./jebzdzidy";
+import { KwejkScraper } from "./kwejk";
 require("dotenv").config();
-const schedule = require("node-schedule");
+const app = express();
 // import * as cron from 'node-cron'
 
 const jbzScraper = new JbzScraper();
 const kwejkScraper = new KwejkScraper();
 
-logger.info("connecting to database");
+info(["connecting to database"]);
 
 mongoose
-  .connect(config.MONGO_URL, {
+  .connect(MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
     useCreateIndex: true,
   })
   .then(() => {
-    logger.info("Connected to database!");
+    info(["Connected to database!"]);
   })
   .catch((e: Error) => {
-    logger.error("Error with connecting to database" + e.message);
+    error("Error with connecting to database" + e.message);
   });
 
 app.use(cors());
+app.use(helmet());
 app.use(express.static("build"));
-app.use(middleware.tokenExtractor);
+app.use(tokenExtractor);
 app.use(bp.json());
 app.use(bp.urlencoded({ extended: true }));
 app.use("/", memeRouter);
@@ -64,6 +66,6 @@ schedule.scheduleJob("0 8 * * *", function () {
   runScrap();
 });
 
-app.use(middleware.unknownRequest);
+app.use(unknownRequest);
 
 module.exports = app;

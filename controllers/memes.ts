@@ -1,12 +1,12 @@
 export {};
-const memeRouter = require("express").Router();
+export const memeRouter = require("express").Router();
 const Meme = require("../models/meme");
-const middleware = require("../utils/middleware");
-const path = require("path");
-const jwt = require("jsonwebtoken");
-const User = require("../models/user");
-const fs = require("fs");
 const mongoBinary = require("mongodb").Binary;
+const User = require("../models/user");
+import { paginatedResults } from "../utils/middleware";
+import * as path from "path";
+import * as jwt from "jsonwebtoken";
+import * as fs from "fs";
 
 var multer = require("multer");
 var upload = multer({ dest: "uploads/" });
@@ -16,40 +16,24 @@ memeRouter.get("/memes/default", async (req, res) => {
   res.json(memes);
 });
 
-memeRouter.get(
-  "/memes/user",
-  middleware.paginatedResults(Meme, "default"),
-  (req, res) => {
-    res.json(res.paginatedResults);
-  }
-);
+memeRouter.get("/memes/user", paginatedResults(Meme, "default"), (req, res) => {
+  res.json(res.paginatedResults);
+});
 
-memeRouter.get(
-  "/memes/usersMemes",
-  middleware.paginatedResults(Meme, "default"),
-  (req, res) => {
-    console.log("sending default");
-    res.json(res.paginatedResults);
-  }
-);
+memeRouter.get("/memes/usersMemes", paginatedResults(Meme, "default"), (req, res) => {
+  console.log("sending default");
+  res.json(res.paginatedResults);
+});
 
-memeRouter.get(
-  "/memes/kwejk",
-  middleware.paginatedResults(Meme, "kwejk"),
-  (req, res) => {
-    console.log("sending kwejk");
-    res.json(res.paginatedResults);
-  }
-);
+memeRouter.get("/memes/kwejk", paginatedResults(Meme, "kwejk"), (req, res) => {
+  console.log("sending kwejk");
+  res.json(res.paginatedResults);
+});
 
-memeRouter.get(
-  "/memes/jebzdzidy",
-  middleware.paginatedResults(Meme, "jebzdzidy"),
-  (req, res) => {
-    console.log("sending dzida");
-    res.json(res.paginatedResults);
-  }
-);
+memeRouter.get("/memes/jebzdzidy", paginatedResults(Meme, "jebzdzidy"), (req, res) => {
+  console.log("sending dzida");
+  res.json(res.paginatedResults);
+});
 
 memeRouter.get("/memes/:id", async (req, res) => {
   const id = req.params.id;
@@ -133,4 +117,4 @@ memeRouter.post("/memes/add", upload.single("newMeme"), async (req, res) => {
   }
 });
 
-module.exports = memeRouter;
+// module.exports = memeRouter;

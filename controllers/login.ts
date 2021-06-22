@@ -1,9 +1,9 @@
 export {};
-const loginRouter = require("express").Router();
+export const loginRouter = require("express").Router();
 const User = require("../models/user");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 require("dotenv").config();
+import * as bcrypt from "bcrypt";
+import * as jwt from "jsonwebtoken";
 
 loginRouter.post("/api/login", async (req, res) => {
   const body = req.body;
@@ -13,7 +13,7 @@ loginRouter.post("/api/login", async (req, res) => {
     passwordHash: string;
     _id: string;
   } = await User.findOne({ username: body.username });
-  const correctPassword: string = registeredUser
+  const correctPassword: boolean = registeredUser
     ? await bcrypt.compare(body.password, registeredUser.passwordHash)
     : false;
 
@@ -33,4 +33,4 @@ loginRouter.post("/api/login", async (req, res) => {
   res.status(200).json({ token, username: registeredUser.username });
 });
 
-module.exports = loginRouter;
+// module.exports = loginRouter;
