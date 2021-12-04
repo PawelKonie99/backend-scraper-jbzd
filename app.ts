@@ -9,6 +9,7 @@ const middleware = require("./utils/middleware");
 const memeRouter = require("./controllers/memes");
 const loginRouter = require("./controllers/login");
 const usersRouter = require("./controllers/users");
+const adminRouter = require("./controllers/admin");
 const JbzScraper = require("./jebzdzidy");
 const KwejkScraper = require("./kwejk");
 const bp = require("body-parser");
@@ -22,18 +23,18 @@ const kwejkScraper = new KwejkScraper();
 logger.info("connecting to database");
 
 mongoose
-  .connect(config.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true,
-  })
-  .then(() => {
-    logger.info("Connected to database!");
-  })
-  .catch((e: Error) => {
-    logger.error("Error with connecting to database" + e.message);
-  });
+    .connect(config.MONGO_URL, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useFindAndModify: false,
+        useCreateIndex: true,
+    })
+    .then(() => {
+        logger.info("Connected to database!");
+    })
+    .catch((e: Error) => {
+        logger.error("Error with connecting to database" + e.message);
+    });
 
 app.use(cors());
 app.use(express.static("build"));
@@ -43,15 +44,16 @@ app.use(bp.urlencoded({ extended: true }));
 app.use("/", memeRouter);
 app.use("/", usersRouter);
 app.use("/", loginRouter);
+app.use("/", adminRouter);
 
 const runScrap = async () => {
-  await kwejkScraper.fetchPageParam();
-  await jbzScraper.fetchPages();
-  // return process.exit(0);
+    await kwejkScraper.fetchPageParam();
+    await jbzScraper.fetchPages();
+    // return process.exit(0);
 };
 
 if (process.env.NODE_ENV === "scrap") {
-  runScrap();
+    runScrap();
 }
 
 // cron.schedule('*/8 * * * *', () => {
@@ -61,7 +63,7 @@ if (process.env.NODE_ENV === "scrap") {
 
 // scrapers are working everyday at 8 pm
 schedule.scheduleJob("0 8 * * *", function () {
-  runScrap();
+    runScrap();
 });
 
 app.use(middleware.unknownRequest);
