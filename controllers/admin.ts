@@ -20,18 +20,6 @@ adminRouter.post("/api/admin", async (req, res) => {
     }
 
     const allUsers = await User.find();
-    console.log(allUsers);
-    // let isAdmin: boolean = false;
-    // if (body.password === process.env.ADMIN_PASSWORD && body.username === process.env.ADMIN_USERNAME) {
-    //     isAdmin = true;
-    // }
-
-    // const userForToken: { username: string; id: string } = {
-    //     username: registeredUser.username,
-    //     id: registeredUser._id,
-    // };
-
-    // const token = await jwt.sign(userForToken, process.env.SECRET);
 
     res.status(200).json({ allUsers });
 });
