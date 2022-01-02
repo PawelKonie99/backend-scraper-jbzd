@@ -12,65 +12,48 @@ var multer = require("multer");
 var upload = multer({ dest: "uploads/" });
 
 memeRouter.get("/memes/default", async (req, res) => {
-  const memes = await User.find({}).populate("user", { date: 1 });
-  res.json(memes);
+    const memes = await User.find({}).populate("user", { date: 1 });
+    res.json(memes);
 });
 
-memeRouter.get(
-  "/memes/user",
-  middleware.paginatedResults(Meme, "default"),
-  (req, res) => {
+memeRouter.get("/memes/user", middleware.paginatedResults(Meme, "default"), (req, res) => {
     res.json(res.paginatedResults);
-  }
-);
+});
 
-memeRouter.get(
-  "/memes/usersMemes",
-  middleware.paginatedResults(Meme, "default"),
-  (req, res) => {
+memeRouter.get("/memes/usersMemes", middleware.paginatedResults(Meme, "default"), (req, res) => {
     console.log("sending default");
     res.json(res.paginatedResults);
-  }
-);
+});
 
-memeRouter.get(
-  "/memes/kwejk",
-  middleware.paginatedResults(Meme, "kwejk"),
-  (req, res) => {
+memeRouter.get("/memes/kwejk", middleware.paginatedResults(Meme, "kwejk"), (req, res) => {
     console.log("sending kwejk");
     res.json(res.paginatedResults);
-  }
-);
+});
 
-memeRouter.get(
-  "/memes/jebzdzidy",
-  middleware.paginatedResults(Meme, "jebzdzidy"),
-  (req, res) => {
+memeRouter.get("/memes/jebzdzidy", middleware.paginatedResults(Meme, "jebzdzidy"), (req, res) => {
     console.log("sending dzida");
     res.json(res.paginatedResults);
-  }
-);
+});
 
 memeRouter.get("/memes/:id", async (req, res) => {
-  const id = req.params.id;
-  const result = await Meme.findById(id);
-  res.json(result);
+    const id = req.params.id;
+    const result = await Meme.findById(id);
+    res.json(result);
 });
 
 memeRouter.get("*", async (req, res) => {
-  console.log("sending index.html");
-  const index = path.join(__dirname, "../build", "index.html");
-  res.sendFile(index);
+    console.log("sending index.html");
+    const index = path.join(__dirname, "../build", "index.html");
+    res.sendFile(index);
 });
 
 const validateToken = (req) => {
-  const authorization = req.authorization;
+    const authorization = req.authorization;
+    if (authorization && authorization.startsWith("bearer ")) {
+        return authorization.substring(7);
+    }
 
-  if (authorization && authorization.startsWith("bearer ")) {
-    return authorization.substring(7);
-  }
-
-  return null;
+    return null;
 };
 
 // memeRouter.get("/memes/newmeme", async (req, res) => {
@@ -78,59 +61,91 @@ const validateToken = (req) => {
 // });
 
 memeRouter.post("/memes/add", upload.single("newMeme"), async (req, res) => {
-  const file = req.file;
-  let imageBuffer;
+    const file = req.file;
+    let imageBuffer;
 
-  if (!file) {
-    console.log("Please upload file");
-    return;
-  }
+    if (!file) {
+        console.log("Please upload file");
+        return;
+    }
 
-  if (req.file.originalname.match(/jfif/i)) {
-    console.log("Wrong file type");
-    return;
-  }
+    if (req.file.originalname.match(/jfif/i)) {
+        console.log("Wrong file type");
+        return;
+    }
 
-  fs.readFile(req.file.path, function (err, data) {
-    if (err) throw err;
-    // data will contain your file contents
-    // console.log("the data is : ", data);
-    imageBuffer = data;
-  });
-
-  // const body = req.body;
-  const token: string = validateToken(req);
-  const decodedToken = jwt.verify(token, process.env.SECRET);
-
-  if (!(decodedToken || token)) {
-    res.status(401).json({
-      error: "Token invalid or missing",
+    fs.readFile(req.file.path, function (err, data) {
+        if (err) throw err;
+        // data will contain your file contents
+        // console.log("the data is : ", data);
+        imageBuffer = data;
     });
-  }
 
-  const user = await User.findById(decodedToken.id);
+    // const body = req.body;
+    const token: string = validateToken(req);
+    const decodedToken = jwt.verify(token, process.env.SECRET);
 
-  const newMeme = new Meme({
-    title: req.body.title,
-    photoUrl: req.file.filename,
-    website: "default",
-    user: user._id,
-    mimeType: req.file.mimetype,
-    buffer: mongoBinary(imageBuffer),
-  });
+    if (!(decodedToken || token)) {
+        res.status(401).json({
+            error: "Token invalid or missing",
+        });
+    }
 
-  if (newMeme.photoUrl === undefined) {
-    return;
-  }
+    const user = await User.findById(decodedToken.id);
 
-  try {
-    const newMemeToSave = await newMeme.save();
-    user.memes = user.memes.concat(newMemeToSave._id);
-    await user.save();
-    res.status(201).json(newMemeToSave);
-  } catch (e) {
-    res.send(e);
-  }
+    const newMeme = new Meme({
+        title: req.body.title,
+        photoUrl: req.file.filename,
+        website: "default",
+        user: user._id,
+        mimeType: req.file.mimetype,
+        buffer: mongoBinary(imageBuffer),
+    });
+
+    if (newMeme.photoUrl === undefined) {
+        return;
+    }
+
+    try {
+        const newMemeToSave = await newMeme.save();
+        user.memes = user.memes.concat(newMemeToSave._id);
+        await user.save();
+        res.status(201).json(newMemeToSave);
+    } catch (e) {
+        res.send(e);
+    }
+});
+
+memeRouter.post("/memes/delete", async (req, res) => {
+    const body = req.body;
+
+    const token: string = validateToken(req);
+    const decodedToken = jwt.verify(token, process.env.SECRET);
+
+    if (!(decodedToken || token)) {
+        res.status(401).json({
+            error: "Token invalid or missing",
+        });
+    }
+
+    // const user = await User.findById();
+    // const user = User.findOne({ username: "test" });
+    User.findOne({ username: new RegExp("^" + body.username + "$", "i") }, async function (err, doc) {
+        //Do your action here..
+        const memesArray = Array?.from(doc?.memes)?.map((v: any) => v.toJSON());
+
+        const restOfUserMemes = memesArray?.filter((meme: any) => meme !== body.memeId);
+        doc.memes = restOfUserMemes;
+        await doc.save();
+    });
+
+    try {
+        await Meme.findByIdAndDelete(body.memeId);
+        // await user.save();
+        res.status(200).json({ deleted: "success" });
+    } catch (e) {
+        res.status(400).json({ deleted: "fail" });
+    }
 });
 
 module.exports = memeRouter;
