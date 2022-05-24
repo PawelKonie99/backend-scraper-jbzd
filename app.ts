@@ -56,11 +56,6 @@ if (process.env.NODE_ENV === "scrap") {
     runScrap();
 }
 
-// cron.schedule('*/8 * * * *', () => {
-//   console.log('cron works every hour')
-//   runScrap();
-// });
-
 // scrapers are working everyday at 8 pm
 schedule.scheduleJob("0 8 * * *", function () {
     runScrap();
